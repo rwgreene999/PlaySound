@@ -2,7 +2,7 @@ CXX := g++
 CXXFLAGS := -std=c++17 -O2 -Wall -Wextra -pedantic
 DEBUG_CXXFLAGS := -std=c++17 -O0 -g -Wall -Wextra -pedantic
 TARGET := PlaySound
-SRC := PlaySound.cpp
+SRC := PlaySound.cpp AudioPlayback.cpp BellAudio.cpp
 
 .PHONY: all debug run clean
 
