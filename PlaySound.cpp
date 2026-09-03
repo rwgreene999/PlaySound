@@ -66,7 +66,10 @@ int main()
                 }
                 else
                 {
-                    std::cerr << "Playback failed for file: " << path << std::endl;
+                    if (ext != "mp3")
+                    {
+                        std::cerr << "Playback failed for file: " << path << std::endl;
+                    }
                 }
             }
         }
