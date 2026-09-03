@@ -141,5 +141,25 @@ bool tryPlayFile(const std::string &path)
         }
     }
 
+    // If no backend succeeded and it's an MP3, provide helpful guidance
+    if (ext == "mp3")
+    {
+        std::cerr << "\nNo MP3 player found on this system." << std::endl;
+        std::cerr << "To play MP3 files, install one of the following packages:\n"
+                  << std::endl;
+        std::cerr << "  Option 0 return:" << std::endl;
+        std::cerr << "  Option 1 (lightweight):" << std::endl;
+        std::cerr << "    sudo apt install mpg123" << std::endl;
+        std::cerr << "  Option 2:" << std::endl;
+        std::cerr << "    sudo apt install mpg321" << std::endl;
+        std::cerr << "  Option 3 (full multimedia suite):" << std::endl;
+        std::cerr << "    sudo apt install ffmpeg" << std::endl;
+        std::cerr << "  Option 4 (VLC):" << std::endl;
+        std::cerr << "    sudo apt install vlc" << std::endl;
+        std::cerr << "  Option 5 (mpv):" << std::endl;
+        std::cerr << "    sudo apt install mpv" << std::endl;
+        std::cerr << "\nAlternatively, convert your MP3 to WAV format." << std::endl;
+    }
+
     return false;
 }
