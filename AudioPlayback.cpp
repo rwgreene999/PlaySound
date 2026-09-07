@@ -59,6 +59,24 @@ namespace
         return value;
     }
 
+    bool isAudioFormatInternal(const std::string &ext)
+    {
+        static const std::vector<std::string> audioFormats = {
+            "wav", "mp3", "mp3x", "m3u", "ogg", "flac", "aac", "wma", "opus"
+        };
+        for (const auto &format : audioFormats)
+        {
+            if (ext == format)
+                return true;
+        }
+        return false;
+    }
+
+}
+
+bool isAudioFormat(const std::string &ext)
+{
+    return isAudioFormatInternal(ext);
 }
 
 std::string getExtension(const std::string &path)
@@ -86,6 +104,7 @@ bool tryPlayFile(const std::string &path)
 
     if (ext == "wav")
     {
+        // WAV-specific lightweight players
         if (commandExists("paplay"))
         {
             backends.push_back({"paplay", "paplay " + pathArg + " >/dev/null 2>&1"});
@@ -101,6 +120,7 @@ bool tryPlayFile(const std::string &path)
     }
     else if (ext == "mp3")
     {
+        // MP3-specific players
         if (commandExists("mpg123"))
         {
             backends.push_back({"mpg123", "mpg123 -q " + pathArg + " >/dev/null 2>&1"});
@@ -141,24 +161,22 @@ bool tryPlayFile(const std::string &path)
         }
     }
 
-    // If no backend succeeded and it's an MP3, provide helpful guidance
-    if (ext == "mp3")
+    // If no backend succeeded and it's an audio file, provide helpful guidance
+    if (isAudioFormatInternal(ext))
     {
-        std::cerr << "\nNo MP3 player found on this system." << std::endl;
-        std::cerr << "To play MP3 files, install one of the following packages:\n"
-                  << std::endl;
-        std::cerr << "  Option 0 return:" << std::endl;
-        std::cerr << "  Option 1 (lightweight):" << std::endl;
+        std::cerr << "\nNo audio player found on this system for ." << ext << " files." << std::endl;
+        std::cerr << "Install one of the following multimedia packages:\n" << std::endl;
+        std::cerr << "  Option 1 (lightweight, MP3 only):" << std::endl;
         std::cerr << "    sudo apt install mpg123" << std::endl;
-        std::cerr << "  Option 2:" << std::endl;
+        std::cerr << "  Option 2 (lightweight, MP3 only):" << std::endl;
         std::cerr << "    sudo apt install mpg321" << std::endl;
-        std::cerr << "  Option 3 (full multimedia suite):" << std::endl;
+        std::cerr << "  Option 3 (universal multimedia suite):" << std::endl;
         std::cerr << "    sudo apt install ffmpeg" << std::endl;
-        std::cerr << "  Option 4 (VLC):" << std::endl;
+        std::cerr << "  Option 4 (VLC - comprehensive player):" << std::endl;
         std::cerr << "    sudo apt install vlc" << std::endl;
-        std::cerr << "  Option 5 (mpv):" << std::endl;
+        std::cerr << "  Option 5 (mpv - lightweight universal player):" << std::endl;
         std::cerr << "    sudo apt install mpv" << std::endl;
-        std::cerr << "\nAlternatively, convert your MP3 to WAV format." << std::endl;
+        std::cerr << "\nThese players support MP3, OGG, FLAC, M3U, MP3X, and other audio formats." << std::endl;
     }
 
     return false;

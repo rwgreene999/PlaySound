@@ -40,7 +40,7 @@ int main()
 
         if (choice == "2")
         {
-            std::cout << "Enter full path to .mp3 or .wav file: " << std::flush;
+            std::cout << "Enter full path to an audio file (.mp3, .wav, .ogg, .flac, etc.): " << std::flush;
             std::string path;
             std::getline(std::cin, path);
 
@@ -55,21 +55,13 @@ int main()
             else
             {
                 const std::string ext = getExtension(path);
-                if (ext != "mp3" && ext != "wav")
+                if (!isAudioFormat(ext))
                 {
-                    std::cerr << "Unsupported file type. Please use .mp3 or .wav." << std::endl;
+                    std::cerr << "Unsupported file type. Please use a common audio format (.mp3, .wav, .ogg, .flac, .m3u, .aac, etc.)." << std::endl;
                 }
-
-                if (tryPlayFile(path))
+                else if (tryPlayFile(path))
                 {
                     std::cout << "Playback finished." << std::endl;
-                }
-                else
-                {
-                    if (ext != "mp3")
-                    {
-                        std::cerr << "Playback failed for file: " << path << std::endl;
-                    }
                 }
             }
         }
